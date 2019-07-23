@@ -1,5 +1,7 @@
 **Twitter will be discontinuing support for Twitter Kit on October 31, 2018. [Read the blog post here](https://blog.twitter.com/developer/en_us/topics/tools/2018/discontinuing-support-for-twitter-kit-sdk.html).**
 
+这个项目是从官方的Twitter Kit项目中搬过来的，用于自己的开发与维护。以下说明仅供官方仓库的接入方式。
+
 # Twitter Kit for Android
 
 Twitter Kit is a multi-module gradle project containing several Twitter SDKs including TweetComposer, TwitterCore, and TweetUi. Twitter Kit is designed to make interacting with Twitter seamless and efficient.
@@ -25,6 +27,7 @@ Add twitter dependency to your build.gradle:
 
 repositories {
   jcenter()
+  
 }
 
 dependencies {

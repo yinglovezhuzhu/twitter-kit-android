@@ -1,0 +1,81 @@
+apply plugin: 'maven'
+
+ext {
+
+    minifyEnabled = true // 是否启用代码混淆
+
+    deployMode = true // 是否为发布模式，如果发布模式，所以对SDK内部依赖的引用为远程仓库，反之为本地项目
+
+    deployReleaase = false // 是否发布正式仓库，true 正式仓库 false 测试仓库
+    
+    // 发布配置，发包前必须仔细检查
+    versionCode = 330
+    versionName = "3.3.0"
+
+    // 测试仓库配置
+    debugRepositoryConfig = [
+            uname                : "rastar_sdk_oversea_deployer",
+            pwd                  : "Rastar2018",
+            repositoryUrl        : "http://192.168.33.110:8081/repository/RastarGameSdkOversea/",
+            repositorySnapshotUrl: "http://192.168.33.110:8081/repository/maven-snapshots/",
+    ]
+
+    // 正式仓库配置
+    releaseRepositoryConfig = [
+            uname                : "rastar_sdk_oversea_deployer",
+            pwd                  : "Rastar2018",
+            repositoryUrl        : "http://nexus.rastarops.com:8999/repository/RastarGameSdkOversea/",
+            repositorySnapshotUrl: "http://nexus.rastarops.com:8999/repository/maven-snapshots/",
+    ]
+
+
+    mavenDeplay = this.&mavenDeploy
+    getDateTime = this.&getDateTime
+}
+
+/**
+ * 发布到远程仓库
+ * @param artifactName 包名称
+ * @param _artifactId 包id
+ * @param _groupId 包组id
+ * @param packagingType 包类型，可以是aar，jar
+ * @param versionName 版本名
+ * @param _description 发包描述
+ * @return
+ */
+def mavenDeploy(artifactName, _artifactId, _groupId, packagingType, versionName, _description) {
+    def repositoryUrl = rootProject.ext.deployReleaase ? releaseRepositoryConfig.repositoryUrl : debugRepositoryConfig.repositoryUrl
+    def repositorySnapshotUrl = rootProject.ext.deployReleaase ? releaseRepositoryConfig.repositorySnapshotUrl : debugRepositoryConfig.repositorySnapshotUrl
+    def uname = rootProject.ext.deployReleaase ? releaseRepositoryConfig.uname : debugRepositoryConfig.uname
+    def pwd = rootProject.ext.deployReleaase ? releaseRepositoryConfig.pwd : debugRepositoryConfig.pwd
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                // 仓库地址
+                repository(url: repositoryUrl) {
+                    // 用户校验 用户名/密码
+                    authentication(userName: uname, password: pwd)
+                }
+                // 快照仓库地址（可选）
+                snapshotRepository(url: repositorySnapshotUrl) {
+                    // 用户校验 用户名/密码
+                    authentication(userName: uname, password: pwd)
+                }
+
+                pom.project {
+                    name artifactName // artifact名称
+                    version versionName // artifact版本
+                    artifactId _artifactId // artifact id
+                    groupId _groupId // artifact所属Group Id
+                    packaging packagingType // 文件格式
+                    description _description // 描述
+                }
+            }
+        }
+    }
+}
+
+def static getDateTime(String format) {
+    new Date().format((null == format || format.length() == 0) ? "yyyyMMddHHmm" : format, TimeZone.getDefault())
+}
+

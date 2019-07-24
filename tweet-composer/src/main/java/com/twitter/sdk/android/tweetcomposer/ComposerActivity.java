@@ -33,6 +33,7 @@ public class ComposerActivity extends Activity {
     static final String EXTRA_THEME = "EXTRA_THEME";
     static final String EXTRA_TEXT = "EXTRA_TEXT";
     static final String EXTRA_HASHTAGS = "EXTRA_HASHTAGS";
+    static final String EXTRA_TASK_ID = "EXTRA_TASK_ID";
     private static final int PLACEHOLDER_ID = -1;
     private static final String PLACEHOLDER_SCREEN_NAME = "";
     private ComposerController composerController;
@@ -49,11 +50,12 @@ public class ComposerActivity extends Activity {
         final String text = intent.getStringExtra(EXTRA_TEXT);
         final String hashtags = intent.getStringExtra(EXTRA_HASHTAGS);
         final int themeResId = intent.getIntExtra(EXTRA_THEME, R.style.ComposerLight);
+        final String taskId = intent.getStringExtra(EXTRA_TASK_ID);
 
         setTheme(themeResId);
         setContentView(R.layout.tw__activity_composer);
         final ComposerView composerView = findViewById(R.id.tw__composer_view);
-        composerController = new ComposerController(composerView, session, imageUri, text, hashtags,
+        composerController = new ComposerController(taskId, composerView, session, imageUri, text, hashtags,
                 new FinisherImpl());
     }
 
@@ -82,6 +84,7 @@ public class ComposerActivity extends Activity {
         private Uri imageUri;
         private String text;
         private String hashtags;
+        private String taskId;
 
         public Builder(Context context) {
             if (context == null) {
@@ -136,6 +139,11 @@ public class ComposerActivity extends Activity {
             return this;
         }
 
+        public Builder taskId(String taskId) {
+            this.taskId = taskId;
+            return this;
+        }
+
         public Intent createIntent() {
             if (token == null) {
                 throw new IllegalStateException("Must set a TwitterSession");
@@ -146,6 +154,7 @@ public class ComposerActivity extends Activity {
             intent.putExtra(EXTRA_THEME, themeResId);
             intent.putExtra(EXTRA_TEXT, text);
             intent.putExtra(EXTRA_HASHTAGS, hashtags);
+            intent.putExtra(EXTRA_TASK_ID, taskId);
             return intent;
         }
     }

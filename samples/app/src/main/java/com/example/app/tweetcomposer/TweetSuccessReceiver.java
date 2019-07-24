@@ -32,7 +32,8 @@ public class TweetSuccessReceiver extends BroadcastReceiver {
         Bundle intentExtras = intent.getExtras();
         if (intentExtras != null) {
             Long tweetId = intentExtras.getLong(TweetUploadService.EXTRA_TWEET_ID);
-            Toast.makeText(context, "Success TweetId " + Long.toString(tweetId),
+            String taskId = intentExtras.getString(TweetUploadService.EXTRA_TASK_ID);
+            Toast.makeText(context, "TaskId: " + taskId + " Success TweetId " + Long.toString(tweetId),
                     Toast.LENGTH_SHORT).show();
         }
     }

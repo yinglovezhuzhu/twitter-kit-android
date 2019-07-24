@@ -33,7 +33,8 @@ public class TweetFailureReceiver extends BroadcastReceiver {
         if (intentExtras != null) {
             final Intent retryIntent
                     = intentExtras.getParcelable(TweetUploadService.EXTRA_RETRY_INTENT);
-            Log.e("TweetFailureReceiver", retryIntent.toString());
+            String taskId = intentExtras.getString(TweetUploadService.EXTRA_TASK_ID);
+            Log.e("TweetFailureReceiver", "TaskId: " + taskId + "--" + retryIntent.toString());
         }
     }
 }

@@ -38,16 +38,18 @@ class ComposerController {
     final Uri imageUri;
     final ComposerActivity.Finisher finisher;
     final DependencyProvider dependencyProvider;
+    final String taskId;
 
-    ComposerController(final ComposerView composerView, TwitterSession session, Uri imageUri,
+    ComposerController(final String taskId, final ComposerView composerView, TwitterSession session, Uri imageUri,
             String text, String hashtags, ComposerActivity.Finisher finisher) {
-        this(composerView, session, imageUri, text, hashtags, finisher, new DependencyProvider());
+        this(taskId, composerView, session, imageUri, text, hashtags, finisher, new DependencyProvider());
     }
 
     // testing purposes
-    ComposerController(final ComposerView composerView, TwitterSession session, Uri imageUri,
+    ComposerController(final String taskId, final ComposerView composerView, TwitterSession session, Uri imageUri,
             String text, String hashtags, ComposerActivity.Finisher finisher,
             DependencyProvider dependencyProvider) {
+        this.taskId = taskId;
         this.composerView = composerView;
         this.session = session;
         this.imageUri = imageUri;
@@ -121,6 +123,7 @@ class ComposerController {
         @Override
         public void onTweetPost(String text) {
             final Intent intent = new Intent(composerView.getContext(), TweetUploadService.class);
+            intent.putExtra(TweetUploadService.EXTRA_TASK_ID, taskId);
             intent.putExtra(TweetUploadService.EXTRA_USER_TOKEN, session.getAuthToken());
             intent.putExtra(TweetUploadService.EXTRA_TWEET_TEXT, text);
             intent.putExtra(TweetUploadService.EXTRA_IMAGE_URI, imageUri);
@@ -149,6 +152,7 @@ class ComposerController {
 
     void sendCancelBroadcast() {
         final Intent intent = new Intent(TWEET_COMPOSE_CANCEL);
+        intent.putExtra(TweetUploadService.EXTRA_TASK_ID, taskId);
         intent.setPackage(composerView.getContext().getPackageName());
         composerView.getContext().sendBroadcast(intent);
     }

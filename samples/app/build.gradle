@@ -65,8 +65,8 @@ android {
 }
 
 dependencies {
-//    implementation project(':twitter')
-    implementation 'com.twitter.sdk.android:twitter:3.3.0'
+    implementation project(':twitter')
+//    implementation 'com.twitter.sdk.android:twitter:3.3.1'
     implementation project(':twitter-mopub')
     implementation dependency.appCompat
     implementation dependency.design

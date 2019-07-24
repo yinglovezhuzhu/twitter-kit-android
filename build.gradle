@@ -38,6 +38,16 @@ allprojects {
         mavenCentral()
         google()
         jcenter()
+
+        maven {
+            if(rootProject.ext.deployReleaase) {
+                // 正式环境
+                url "http://nexus.rastarops.com:8999/repository/RastarGameSdkOversea/"
+            } else {
+                // 测试环境
+                url "http://192.168.33.110:8081/repository/RastarGameSdkOversea/" // 具体仓库
+            }
+        }
     }
     apply from: rootProject.file('dependencies.gradle')
     apply from: rootProject.file('maven_deploy.gradle')

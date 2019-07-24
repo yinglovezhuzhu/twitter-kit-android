@@ -4,28 +4,28 @@ ext {
 
     minifyEnabled = true // 是否启用代码混淆
 
-    deployMode = true // 是否为发布模式，如果发布模式，所以对SDK内部依赖的引用为远程仓库，反之为本地项目
+    deployMode = false // 是否为发布模式，如果发布模式，所以对SDK内部依赖的引用为远程仓库，反之为本地项目
 
     deployReleaase = false // 是否发布正式仓库，true 正式仓库 false 测试仓库
     
     // 发布配置，发包前必须仔细检查
-    versionCode = 330
-    versionName = "3.3.0"
+    versionCode = 331
+    versionName = "3.3.1"
 
     // 测试仓库配置
     debugRepositoryConfig = [
-            uname                : "xxxxxxxxxxx",
-            pwd                  : "xxxxxxxxxxx",
-            repositoryUrl        : "xxxxxxxxxxx",
-            repositorySnapshotUrl: "xxxxxxxxxxx",
+            uname                : "rastar_sdk_oversea_deployer",
+            pwd                  : "Rastar2018",
+            repositoryUrl        : "http://192.168.33.110:8081/repository/RastarGameSdkOversea/",
+            repositorySnapshotUrl: "http://192.168.33.110:8081/repository/maven-snapshots/",
     ]
 
     // 正式仓库配置
     releaseRepositoryConfig = [
-            uname                : "xxxxxxxxxxx",
-            pwd                  : "xxxxxxxxxxx",
-            repositoryUrl        : "xxxxxxxxxxx",
-            repositorySnapshotUrl: "xxxxxxxxxxx",
+            uname                : "rastar_sdk_oversea_deployer",
+            pwd                  : "Rastar2018",
+            repositoryUrl        : "http://nexus.rastarops.com:8999/repository/RastarGameSdkOversea/",
+            repositorySnapshotUrl: "http://nexus.rastarops.com:8999/repository/maven-snapshots/",
     ]
 
 

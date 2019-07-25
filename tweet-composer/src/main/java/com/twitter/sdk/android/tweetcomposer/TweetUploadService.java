@@ -100,7 +100,7 @@ public class TweetUploadService extends IntentService {
         }
     }
 
-    void uploadTweetWithMedia(String taskId, TwitterSession session, String text, String mediaId) {
+    void uploadTweetWithMedia(final String taskId, TwitterSession session, String text, String mediaId) {
         final TwitterApiClient client = dependencyProvider.getTwitterApiClient(session);
 
         client.getStatusesService().update(text, null, null, null, null, null, null, true, mediaId)

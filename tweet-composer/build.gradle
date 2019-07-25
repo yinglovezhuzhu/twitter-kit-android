@@ -49,10 +49,10 @@ android {
         warningsAsErrors true
     }
 
-    compileOptions {
-        sourceCompatibility rootProject.sourceCompatibilityVersion
-        targetCompatibility rootProject.targetCompatibilityVersion
-    }
+//    compileOptions {
+//        sourceCompatibility rootProject.sourceCompatibilityVersion
+//        targetCompatibility rootProject.targetCompatibilityVersion
+//    }
 
     testOptions {
         unitTests.returnDefaultValues = true

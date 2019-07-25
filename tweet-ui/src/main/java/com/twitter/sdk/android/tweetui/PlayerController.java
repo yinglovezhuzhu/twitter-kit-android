@@ -69,16 +69,24 @@ class PlayerController {
             final View.OnTouchListener listener = SwipeToDismissTouchListener
                     .createFromView(videoView, callback);
             videoView.setOnTouchListener(listener);
-            videoView.setOnPreparedListener(mediaPlayer -> videoProgressView.setVisibility(View.GONE));
-            videoView.setOnInfoListener((mediaPlayer, what, extra) -> {
-                if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
+            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mediaPlayer) {
                     videoProgressView.setVisibility(View.GONE);
-                    return true;
-                } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
-                    videoProgressView.setVisibility(View.VISIBLE);
-                    return true;
                 }
-                return false;
+            });
+            videoView.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+                @Override
+                public boolean onInfo(MediaPlayer mediaPlayer, int what, int extra) {
+                    if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
+                        videoProgressView.setVisibility(View.GONE);
+                        return true;
+                    } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
+                        videoProgressView.setVisibility(View.VISIBLE);
+                        return true;
+                    }
+                    return false;
+                }
             });
             final Uri uri = Uri.parse(item.url);
             videoView.setVideoURI(uri, item.looping);
@@ -118,11 +126,14 @@ class PlayerController {
 
     void setUpLoopControl() {
         videoControlView.setVisibility(View.INVISIBLE);
-        videoView.setOnClickListener(view -> {
-            if (videoView.isPlaying()) {
-                videoView.pause();
-            } else {
-                videoView.start();
+        videoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (videoView.isPlaying()) {
+                    videoView.pause();
+                } else {
+                    videoView.start();
+                }
             }
         });
     }
@@ -141,19 +152,25 @@ class PlayerController {
     }
 
     void setUpCallToActionListener(final String callToActionUrl) {
-        callToActionView.setOnClickListener(v -> {
-            final Uri uri = Uri.parse(callToActionUrl);
-            final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            IntentUtils.safeStartActivity(callToActionView.getContext(), intent);
+        callToActionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Uri uri = Uri.parse(callToActionUrl);
+                final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                IntentUtils.safeStartActivity(callToActionView.getContext(), intent);
+            }
         });
     }
 
     void setUpRootViewOnClickListener() {
-        rootView.setOnClickListener(v -> {
-            if (callToActionView.getVisibility() == View.VISIBLE) {
-                callToActionView.setVisibility(View.GONE);
-            } else {
-                callToActionView.setVisibility(View.VISIBLE);
+        rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (callToActionView.getVisibility() == View.VISIBLE) {
+                    callToActionView.setVisibility(View.GONE);
+                } else {
+                    callToActionView.setVisibility(View.VISIBLE);
+                }
             }
         });
     }

@@ -38,16 +38,19 @@ public class SpanClickHandler {
 
     public static void enableClicksOnSpans(TextView textView) {
         final SpanClickHandler helper = new SpanClickHandler(textView, null);
-        textView.setOnTouchListener((view, event) -> {
-            final TextView textView1 = (TextView) view;
-            final Layout layout = textView1.getLayout();
-            if (layout != null) {
-                helper.layout = layout;
-                helper.left = textView1.getTotalPaddingLeft() + textView1.getScrollX();
-                helper.top = textView1.getTotalPaddingTop() + textView1.getScrollY();
-                return helper.handleTouchEvent(event);
+        textView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                final TextView textView1 = (TextView) view;
+                final Layout layout = textView1.getLayout();
+                if (layout != null) {
+                    helper.layout = layout;
+                    helper.left = textView1.getTotalPaddingLeft() + textView1.getScrollX();
+                    helper.top = textView1.getTotalPaddingTop() + textView1.getScrollY();
+                    return helper.handleTouchEvent(event);
+                }
+                return false;
             }
-            return false;
         });
     }
 

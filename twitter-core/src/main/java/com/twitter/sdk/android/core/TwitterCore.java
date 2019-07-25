@@ -53,7 +53,7 @@ public class TwitterCore {
     private volatile GuestSessionProvider guestSessionProvider;
 
     TwitterCore(TwitterAuthConfig authConfig) {
-        this(authConfig, new ConcurrentHashMap<>(), null);
+        this(authConfig, new ConcurrentHashMap<Session, TwitterApiClient>(), null);
     }
 
     // Testing only
@@ -84,7 +84,12 @@ public class TwitterCore {
             synchronized (TwitterCore.class) {
                 if (instance == null) {
                     instance = new TwitterCore(Twitter.getInstance().getTwitterAuthConfig());
-                    Twitter.getInstance().getExecutorService().execute(() -> instance.doInBackground());
+                    Twitter.getInstance().getExecutorService().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            instance.doInBackground();
+                        }
+                    });
                 }
             }
         }

@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -68,7 +69,7 @@ public class ComposerView extends LinearLayout {
     }
 
     private void init(Context context) {
-        imageLoader = Picasso.with(getContext());
+        imageLoader = Picasso.get();
         // TODO: make color vary depending on the style
         mediaBg = new ColorDrawable(context.getResources()
                 .getColor(R.color.tw__composer_light_gray));
@@ -80,13 +81,26 @@ public class ComposerView extends LinearLayout {
         super.onFinishInflate();
         findSubviews();
 
-        closeView.setOnClickListener(view -> callbacks.onCloseClick());
+        closeView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                callbacks.onCloseClick();
+            }
+        });
 
-        tweetButton.setOnClickListener(view -> callbacks.onTweetPost(getTweetText()));
+        tweetButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                callbacks.onTweetPost(ComposerView.this.getTweetText());
+            }
+        });
 
-        tweetEditView.setOnEditorActionListener((textView, i, keyEvent) -> {
-            callbacks.onTweetPost(getTweetText());
-            return true;
+        tweetEditView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                callbacks.onTweetPost(ComposerView.this.getTweetText());
+                return true;
+            }
         });
 
         tweetEditView.addTextChangedListener(new TextWatcher() {
@@ -104,11 +118,14 @@ public class ComposerView extends LinearLayout {
             }
         });
 
-        scrollView.setScrollViewListener(scrollY -> {
-            if (scrollY > 0) {
-                divider.setVisibility(View.VISIBLE);
-            } else {
-                divider.setVisibility(View.INVISIBLE);
+        scrollView.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
+            @Override
+            public void onScrollChanged(int scrollY) {
+                if (scrollY > 0) {
+                    divider.setVisibility(View.VISIBLE);
+                } else {
+                    divider.setVisibility(View.INVISIBLE);
+                }
             }
         });
     }

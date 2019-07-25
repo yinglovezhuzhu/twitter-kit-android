@@ -230,12 +230,15 @@ public class MultiTouchImageView extends ImageView
 
         animator.setDuration(SCALE_ANIMATION_DURATION);
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        animator.addUpdateListener(valueAnimator -> {
-            final float scale = (float) valueAnimator.getAnimatedValue();
-            final float ds = scale / getScale();
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                final float scale = (float) valueAnimator.getAnimatedValue();
+                final float ds = scale / MultiTouchImageView.this.getScale();
 
-            setScale(ds, px, py);
-            setImageMatrix();
+                MultiTouchImageView.this.setScale(ds, px, py);
+                MultiTouchImageView.this.setImageMatrix();
+            }
         });
         animator.start();
     }

@@ -4,7 +4,7 @@ ext {
 
     minifyEnabled = true // 是否启用代码混淆
 
-    deployMode = false // 是否为发布模式，如果发布模式，所以对SDK内部依赖的引用为远程仓库，反之为本地项目
+    deployMode = true // 是否为发布模式，如果发布模式，所以对SDK内部依赖的引用为远程仓库，反之为本地项目
 
     deployReleaase = false // 是否发布正式仓库，true 正式仓库 false 测试仓库
     

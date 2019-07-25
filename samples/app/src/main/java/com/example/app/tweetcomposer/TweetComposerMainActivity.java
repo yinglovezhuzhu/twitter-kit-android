@@ -22,7 +22,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 
 import com.example.app.BaseActivity;
@@ -50,25 +52,36 @@ public class TweetComposerMainActivity extends BaseActivity {
         }
 
         final Button tweetComposer = findViewById(R.id.tweet_composer);
-        tweetComposer.setOnClickListener(view -> {
-            try {
-                new TweetComposer.Builder(TweetComposerMainActivity.this)
-                        .text("Tweet from TwitterKit!")
-                        .url(new URL("http://www.twitter.com"))
-                        .show();
+        tweetComposer.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                try {
+                    new TweetComposer.Builder(TweetComposerMainActivity.this)
+                            .text("Tweet from TwitterKit!")
+                            .url(new URL("http://www.twitter.com"))
+                            .show();
 
-            } catch (MalformedURLException e) {
-                Log.e(TAG, "error creating tweet intent", e);
+                } catch (MalformedURLException e) {
+                    Log.e(TAG, "error creating tweet intent", e);
+                }
             }
         });
 
         final Button organicComposer = findViewById(R.id.organic_composer);
-        organicComposer.setOnClickListener(view -> launchPicker());
+        organicComposer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchPicker();
+            }
+        });
+
+
     }
 
     void launchPicker() {
         final Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(IMAGE_TYPES);
+//        intent.setType("video/*");
         startActivityForResult(Intent.createChooser(intent, "Pick an Image"), IMAGE_PICKER_CODE);
     }
 

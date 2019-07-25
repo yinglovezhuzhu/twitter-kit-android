@@ -25,6 +25,7 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 
 import com.twitter.sdk.android.core.R;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterAuthException;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.internal.TwitterApi;
@@ -66,7 +67,7 @@ public class OAuthActivity extends Activity implements OAuthController.Listener 
 
         final TwitterCore kit = TwitterCore.getInstance();
         oAuthController = new OAuthController(spinner, webView,
-                getIntent().getParcelableExtra(EXTRA_AUTH_CONFIG),
+                (TwitterAuthConfig) getIntent().getParcelableExtra(EXTRA_AUTH_CONFIG),
                 new OAuth1aService(kit, new TwitterApi()), this);
         oAuthController.startAuth();
     }

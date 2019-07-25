@@ -45,7 +45,7 @@ import java.lang.ref.WeakReference;
  */
 public class TimelineActivity extends BaseActivity {
 
-    final WeakReference<Activity> activityRef = new WeakReference<>(TimelineActivity.this);
+    final WeakReference<Activity> activityRef = new WeakReference<Activity>(TimelineActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,24 +105,27 @@ public class TimelineActivity extends BaseActivity {
         });
 
         // specify action to take on swipe refresh
-        swipeLayout.setOnRefreshListener(() -> {
-            swipeLayout.setRefreshing(true);
-            adapter.refresh(new Callback<TimelineResult<Tweet>>() {
-                @Override
-                public void success(Result<TimelineResult<Tweet>> result) {
-                    swipeLayout.setRefreshing(false);
-                }
-
-                @Override
-                public void failure(TwitterException exception) {
-                    swipeLayout.setRefreshing(false);
-                    final Activity activity = activityRef.get();
-                    if (activity != null && !activity.isFinishing()) {
-                        Toast.makeText(activity, exception.getMessage(),
-                                Toast.LENGTH_SHORT).show();
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeLayout.setRefreshing(true);
+                adapter.refresh(new Callback<TimelineResult<Tweet>>() {
+                    @Override
+                    public void success(Result<TimelineResult<Tweet>> result) {
+                        swipeLayout.setRefreshing(false);
                     }
-                }
-            });
+
+                    @Override
+                    public void failure(TwitterException exception) {
+                        swipeLayout.setRefreshing(false);
+                        final Activity activity = activityRef.get();
+                        if (activity != null && !activity.isFinishing()) {
+                            Toast.makeText(activity, exception.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
         });
     }
 }
